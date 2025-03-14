@@ -5,47 +5,325 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.03);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-800 text-white p-5 hidden md:block">
-            <h2 class="text-2xl font-bold">Dashboard</h2>
-            <nav class="mt-5">
-                <ul>
-                    <li class="py-2"><a href="#" class="block hover:bg-gray-700 p-2 rounded">Home</a></li>
-                    <li class="py-2"><a href="#" class="block hover:bg-gray-700 p-2 rounded">Profile</a></li>
-                    <li class="py-2"><a href="#" class="block hover:bg-gray-700 p-2 rounded">Settings</a></li>
+        <aside class="w-72 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-5 hidden md:block transition-all duration-300 shadow-lg">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                    <i class="fas fa-chart-line text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold">Dashboard</h2>
+            </div>
+            <nav class="mt-8">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200 font-medium">
+                            <i class="fas fa-home w-5"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200 font-medium">
+                            <i class="fas fa-user w-5"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200 font-medium">
+                            <i class="fas fa-chart-bar w-5"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200 font-medium">
+                            <i class="fas fa-cog w-5"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
+            <div class="absolute bottom-5 left-5 right-5">
+                <div class="bg-primary-700 p-4 rounded-lg bg-opacity-70">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.pravatar.cc/40" alt="User" class="rounded-full border-2 border-white">
+                        <div>
+                            <p class="font-medium">Krisha Shah</p>
+                            <p class="text-xs text-gray-300">Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Navbar -->
-            <header class="bg-white shadow p-4 flex justify-between items-center">
-                <h1 class="text-xl font-semibold">Dashboard</h1>
-                <button class="md:hidden bg-gray-800 text-white px-4 py-2 rounded">Menu</button>
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <button class="md:hidden text-gray-700 mr-4">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800">Welcome Back, John!</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search..." class="bg-gray-100 rounded-full py-2 px-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <i class="fas fa-search absolute left-3 top-2.5 text-gray-500"></i>
+                    </div>
+                    <div class="relative">
+                        <button class="relative p-2 rounded-full hover:bg-gray-100">
+                            <i class="fas fa-bell text-gray-600"></i>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                </div>
             </header>
 
             <!-- Dashboard Content -->
-            <main class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-lg font-bold">Total Users</h3>
-                        <p class="text-2xl">1,234</p>
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Dashboard Overview</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover-scale">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Total Users</p>
+                                    <h3 class="text-3xl font-bold text-gray-800">1,234</h3>
+                                    <p class="mt-2 text-xs font-medium text-green-500 flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i> 12% increase
+                                    </p>
+                                </div>
+                                <div class="p-3 rounded-lg bg-blue-100 text-blue-600">
+                                    <i class="fas fa-users text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover-scale">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Revenue</p>
+                                    <h3 class="text-3xl font-bold text-gray-800">$12,345</h3>
+                                    <p class="mt-2 text-xs font-medium text-green-500 flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i> 8% increase
+                                    </p>
+                                </div>
+                                <div class="p-3 rounded-lg bg-green-100 text-green-600">
+                                    <i class="fas fa-dollar-sign text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover-scale">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Orders</p>
+                                    <h3 class="text-3xl font-bold text-gray-800">567</h3>
+                                    <p class="mt-2 text-xs font-medium text-yellow-500 flex items-center">
+                                        <i class="fas fa-arrow-down mr-1"></i> 3% decrease
+                                    </p>
+                                </div>
+                                <div class="p-3 rounded-lg bg-purple-100 text-purple-600">
+                                    <i class="fas fa-shopping-cart text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-lg font-bold">Revenue</h3>
-                        <p class="text-2xl">$12,345</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Chart Section -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm lg:col-span-2">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Performance Analytics</h3>
+                        <canvas id="performanceChart" height="250"></canvas>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-lg font-bold">Orders</h3>
-                        <p class="text-2xl">567</p>
+                    
+                    <!-- Recent Activity -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Recent Activity</h3>
+                            <button class="text-sm text-primary-600 hover:underline">View All</button>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="p-2 bg-blue-100 rounded-lg text-blue-600 mr-3">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">New user registered</p>
+                                    <p class="text-xs text-gray-500">2 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="p-2 bg-green-100 rounded-lg text-green-600 mr-3">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">New sale completed</p>
+                                    <p class="text-xs text-gray-500">15 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="p-2 bg-yellow-100 rounded-lg text-yellow-600 mr-3">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">System alert</p>
+                                    <p class="text-xs text-gray-500">30 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="p-2 bg-purple-100 rounded-lg text-purple-600 mr-3">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">New comment received</p>
+                                    <p class="text-xs text-gray-500">1 hour ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Section -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Current Projects</h3>
+                        <button class="text-sm font-medium px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                            <i class="fas fa-plus mr-1"></i> New Project
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deadline</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Website Redesign</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="w-full h-2 bg-gray-200 rounded-full">
+                                            <div class="h-full bg-green-500 rounded-full" style="width: 75%"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-500">75%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">In Progress</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex -space-x-2">
+                                            <img class="h-6 w-6 rounded-full border-white border-2" src="https://i.pravatar.cc/30?img=1" alt="">
+                                            <img class="h-6 w-6 rounded-full border-white border-2" src="https://i.pravatar.cc/30?img=2" alt="">
+                                            <img class="h-6 w-6 rounded-full border-white border-2" src="https://i.pravatar.cc/30?img=3" alt="">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Dec 15, 2023</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Mobile App</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="w-full h-2 bg-gray-200 rounded-full">
+                                            <div class="h-full bg-blue-500 rounded-full" style="width: 40%"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-500">40%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">In Progress</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex -space-x-2">
+                                            <img class="h-6 w-6 rounded-full border-white border-2" src="https://i.pravatar.cc/30?img=4" alt="">
+                                            <img class="h-6 w-6 rounded-full border-white border-2" src="https://i.pravatar.cc/30?img=5" alt="">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jan 10, 2024</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </main>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('performanceChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }, {
+                        label: 'Revenue',
+                        data: [5, 12, 6, 8, 10, 15],
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                        borderColor: 'rgba(139, 92, 246, 1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
